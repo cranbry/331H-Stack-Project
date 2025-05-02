@@ -34,6 +34,29 @@ class Stack {
         top = p;
     }
 
+    T pop() {
+        if (top != nullptr) {
+            // saving value at top of stack
+            T value = top->data;
+
+            // saving current top node to delete
+            Node<T>* temp = top;
+
+            // updating top to point to next node
+            top = top->next;
+
+            // free memo of old top node
+            delete temp;
+
+            return value;
+            
+        } else {
+
+            cout << "Stack is empty" << endl;
+            return T(); // returns default value for T
+        }
+    }
+
 };
 
 #endif
