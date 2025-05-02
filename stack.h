@@ -49,11 +49,25 @@ class Stack {
             delete temp;
 
             return value;
-            
+
         } else {
 
             cout << "Stack is empty" << endl;
             return T(); // returns default value for T
+        }
+    }
+
+    T peek() {
+        if (top != nullptr) {
+
+            return top->data;
+        
+        }
+        else {
+        
+            cout << "Stack is empty" << endl;
+            return T(); // returns default value for T
+        
         }
     }
 
