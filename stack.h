@@ -62,12 +62,34 @@ class Stack {
 
             return top->data;
         
-        }
-        else {
+        } else {
         
             cout << "Stack is empty" << endl;
             return T(); // returns default value for T
         
+        }
+    }
+
+    void display() {
+        Node<T>* p;
+
+        if (top == nullptr) {
+
+            cout << "Stack is empty" << endl;
+
+        } else {
+
+            p = top;
+            cout << "Stack elements are: " << endl;
+
+            // going thru the list and printing each value
+            while(p != nullptr) {
+
+                cout << p->data << endl;
+                p = p->next; 
+
+            }
+            cout << endl;
         }
     }
 
