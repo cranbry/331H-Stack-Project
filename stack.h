@@ -23,6 +23,9 @@ class Stack {
         
         // destructor for freeing dynamic memory
         ~Stack() {
+            while (!isEmpty()) {
+                pop();
+            }
         }
 
     // method to push a value onto the top of th stack
@@ -91,6 +94,10 @@ class Stack {
             }
             cout << endl;
         }
+    }
+
+    void isEmpty() {
+        return top == nullptr;
     }
 
 };
