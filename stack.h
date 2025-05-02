@@ -99,6 +99,27 @@ class Stack {
     void isEmpty() {
         return top == nullptr;
     }
+};
+
+// InfixEval class for evaluating arithmetic 
+// expressions in infix notation without converting it to postfix
+
+class InfixEval {
+    public:
+        int precedence(char op) {
+
+            if(op == '+'||op == '-') {
+
+                return 1;
+            }
+
+            if(op == '*'||op == '/') {
+
+                return 2;
+            }
+
+            return 0;
+        }
 
 };
 
