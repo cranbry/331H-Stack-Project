@@ -24,7 +24,9 @@ class Stack {
         // destructor for freeing dynamic memory
         ~Stack() {
             while (!isEmpty()) {
+
                 pop();
+
             }
         }
 
@@ -134,7 +136,7 @@ class InfixEval {
             case '/':
                 if (b == 0) {
 
-                    cout << "Division is not possible" << endl;
+                    cout << "Division by 0 is not possible" << endl;
                     exit(1);
                 }  else {
                     return a / b;
@@ -144,40 +146,63 @@ class InfixEval {
         }
     }
 
+    bool processOperator(Stack<int>& numberStack, Stack<char>& opStack) {
+        // first check for enough operands
+        if (numberStack.isEmpty()) {
+
+            cout << "Not enough operands for operator " << opStack.peek() << endl;
+            return false;
+
+        }
+
+        int b = numberStack.pop();  // operand #2
+        
+        if (numberStack.isEmpty()) {
+
+            cout << "Not enough operands for operator " << opStack.peek() << endl;
+            return false;
+
+        }
+        int a = numberStack.pop();  // operand #2
+        
+        // get operator and call applyOp to apply it
+        char op = opStack.pop();
+        int result = applyOp(a, b, op);
+        
+        // pushing result onto stack
+        numberStack.push(result);
+
+        return true;
+    }
+    
+
     public:
         void evaluateExpression(const string &input) {
             // creating two stacks one for operands and one for operators
             Stack<int> numberStack;  // operands
             Stack<char> opStack;     // operators
 
-            int inputLength = input.length();
+            int index = 0;
             // processing each character in the input string
-            for(int i = 0; i < inputLength; i++) {
-                char c = input[i];
+            while (index < input.length()) {
+                
+                char currentChar = input[index];
 
-                if (isspace(c)) {
+                // skipping spaces
+                if (isspace(currentChar)) {
+
+                    index++;
                     continue;
-                } 
-                // checking for numbers / can be neg
-                // - sign at start for neg nums or after an operator or opening "()"
-                if (isdigit(c) || (c == '-' && (i == 0 || 
-                              input[i-1] == '(' || 
-                              input[i-1] == '+' || 
-                              input[i-1] == '-' || 
-                              input[i-1] == '*' || 
-                              input[i-1] == '/'))) {
-                // for negative numbers
-                bool isNegative = false;
-                if (c == '-') {
-                    isNegative = true;
-                    i++;  // moving to next char after minus sign
-                    
-                    // checking if there is digit after minus sign
-                    if (i >= input.length() || !isdigit(input[i])) {
-                        cout << "Error: Invalid negative number format" << endl;
-                        return;
-                    }
-                    c = input[i];  // update char
+
+                }
+                
+                if (isdigit(currentChar)|| 
+                (currentChar == '-' && (index == 0 || 
+                                       input[index-1] == '(' || 
+                                       input[index-1] == '+' || 
+                                       input[index-1] == '-' || 
+                                       input[index-1] == '*' || 
+                                       input[index-1] == '/'))) {
                 }
             }
         }
