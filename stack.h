@@ -157,6 +157,27 @@ class InfixEval {
 
                 if (isspace(c)) {
                     continue;
+                } 
+                // checking for numbers / can be neg
+                // - sign at start for neg nums or after an operator or opening "()"
+                if (isdigit(c) || (c == '-' && (i == 0 || 
+                              input[i-1] == '(' || 
+                              input[i-1] == '+' || 
+                              input[i-1] == '-' || 
+                              input[i-1] == '*' || 
+                              input[i-1] == '/'))) {
+                // for negative numbers
+                bool isNegative = false;
+                if (c == '-') {
+                    isNegative = true;
+                    i++;  // moving to next char after minus sign
+                    
+                    // checking if there is digit after minus sign
+                    if (i >= input.length() || !isdigit(input[i])) {
+                        cout << "Error: Invalid negative number format" << endl;
+                        return;
+                    }
+                    c = input[i];  // update char
                 }
             }
         }
