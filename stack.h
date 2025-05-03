@@ -205,6 +205,25 @@ class InfixEval {
         return true;
     } 
 
+    bool processParenthesis(Stack<int> &numberStack, Stack<char> &opStack) {
+        while (!opStack.isEmpty() && opStack.peek() != '(') {
+            if (!processOperator(numberStack, opStack)) {
+
+                return false;
+
+            } 
+            // Remove the opening parenthesis
+            if (!opStack.isEmpty()) {
+                opStack.pop();  // Pop '('
+            } else {
+                cout << "Error: Mismatched parentheses - missing opening parenthesis" << endl;
+                return false;
+            }
+            
+            return true;
+        }
+    }
+
     public:
         void evaluateExpression(const string &input) {
             // creating two stacks one for operands and one for operators
