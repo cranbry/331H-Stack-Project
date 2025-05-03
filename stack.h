@@ -105,7 +105,7 @@ class Stack {
 // expressions in infix notation without converting it to postfix
 
 class InfixEval {
-    public:
+    private:
         int precedence(char op) {
 
             if(op == '+'||op == '-') {
@@ -120,6 +120,32 @@ class InfixEval {
 
             return 0;
         }
+
+    // operations with two operands
+    int applyOp(int a, int b, char op) {
+        switch(op) {
+
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                if (b == 0) {
+
+                    cout << "Division is not possible" << endl;
+                    exit(1);
+                }  else {
+                    return a / b;
+                }
+            default:
+                return 0; // should not come to this if expression is valid
+        }
+    }
+
+    public:
+        ap
 
 };
 
