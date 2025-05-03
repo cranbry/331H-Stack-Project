@@ -96,7 +96,7 @@ class Stack {
         }
     }
 
-    void isEmpty() {
+    bool isEmpty() {
         return top == nullptr;
     }
 };
@@ -145,7 +145,21 @@ class InfixEval {
     }
 
     public:
-        ap
+        void evaluateExpression(const string &input) {
+            // creating two stacks one for operands and one for operators
+            Stack<int> numberStack;  // operands
+            Stack<char> opStack;     // operators
+
+            int inputLength = input.length();
+            // processing each character in the input string
+            for(int i = 0; i < inputLength; i++) {
+                char c = input[i];
+
+                if (isspace(c)) {
+                    continue;
+                }
+            }
+        }
 
 };
 
