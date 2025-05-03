@@ -24,9 +24,7 @@ class Stack {
         // destructor for freeing dynamic memory
         ~Stack() {
             while (!isEmpty()) {
-
                 pop();
-
             }
         }
 
@@ -56,7 +54,6 @@ class Stack {
             return value;
 
         } else {
-
             cout << "Stack is empty" << endl;
             return T(); // returns default value for T
         }
@@ -64,14 +61,10 @@ class Stack {
 
     T peek() {
         if (top != nullptr) {
-
             return top->data;
-        
         } else {
-        
             cout << "Stack is empty" << endl;
             return T(); // returns default value for T
-        
         }
     }
 
@@ -79,20 +72,15 @@ class Stack {
         Node<T>* p;
 
         if (top == nullptr) {
-
             cout << "Stack is empty" << endl;
-
         } else {
-
             p = top;
             cout << "Stack elements are: " << endl;
 
             // going thru the list and printing each value
             while(p != nullptr) {
-
                 cout << p->data << endl;
                 p = p->next; 
-
             }
             cout << endl;
         }
@@ -109,24 +97,18 @@ class Stack {
 class InfixEval {
     private:
         int precedence(char op) {
-
             if(op == '+'||op == '-') {
-
                 return 1;
             }
-
             if(op == '*'||op == '/') {
-
                 return 2;
             }
-
             return 0;
         }
 
     // operations with two operands
     int applyOp(int a, int b, char op) {
         switch(op) {
-
             case '+':
                 return a + b;
             case '-':
@@ -135,10 +117,9 @@ class InfixEval {
                 return a * b;
             case '/':
                 if (b == 0) {
-
                     cout << "Division by 0 is not possible" << endl;
                     exit(1);
-                }  else {
+                } else {
                     return a / b;
                 }
             default:
@@ -149,21 +130,17 @@ class InfixEval {
     bool processOperator(Stack<int>& numberStack, Stack<char>& opStack) {
         // first check for enough operands
         if (numberStack.isEmpty()) {
-
             cout << "Not enough operands for operator " << opStack.peek() << endl;
             return false;
-
         }
 
         int b = numberStack.pop();  // operand #2
         
         if (numberStack.isEmpty()) {
-
             cout << "Not enough operands for operator " << opStack.peek() << endl;
             return false;
-
         }
-        int a = numberStack.pop();  // operand #2
+        int a = numberStack.pop();  // operand #1
         
         // get operator and call applyOp to apply it
         char op = opStack.pop();
@@ -180,48 +157,52 @@ class InfixEval {
 
         if (expr[index] == '-') {
             isNegative = true;
-            index++; // moving past the ' - ' sign
+            index++; // moving past the '-' sign
 
             // making sure there is digit after minus sign
-            if (index >= expr.length() || !isdigit(expr[index])){
-
+            if (index >= expr.length() || !isdigit(expr[index])) {
                 cout << "Number format is not valid" << endl;
                 return false;
             }
         }
+        
         // parsing the number
         int num = 0;
+        while (index < expr.length() && isdigit(expr[index])) {
+            num = num * 10 + (expr[index] - '0');
+            index++;
+        }
 
         // applying negative sign if needed
         if (isNegative) {
-            num -= num;
+            num = -num;
         }
 
         // pushing num into the stack
         numberStack.push(num);
 
-        // adjusting index because we are 1 num too far
+        // adjusting index because we've gone one character too far
         index--;
         return true;
     } 
 
     bool processParenthesis(Stack<int> &numberStack, Stack<char> &opStack) {
+        // Process all operators until the matching opening parenthesis
         while (!opStack.isEmpty() && opStack.peek() != '(') {
             if (!processOperator(numberStack, opStack)) {
-
-                return false;
-
-            } 
-            // Remove the opening parenthesis
-            if (!opStack.isEmpty()) {
-                opStack.pop();  // Pop '('
-            } else {
-                cout << "Error: Mismatched parentheses - missing opening parenthesis" << endl;
                 return false;
             }
-            
-            return true;
         }
+        
+        // Remove the opening parenthesis
+        if (!opStack.isEmpty()) {
+            opStack.pop();  // Pop '('
+        } else {
+            cout << "Mismatched parentheses or missing opening parenthesis" << endl;
+            return false;
+        }
+        
+        return true;
     }
 
     public:
@@ -233,95 +214,92 @@ class InfixEval {
             int index = 0;
             // processing each character in the input string
             while (index < input.length()) {
-
                 char currentChar = input[index];
 
                 // skipping spaces
                 if (isspace(currentChar)) {
-
                     index++;
                     continue;
-
                 }
                 
-                if (isdigit(currentChar)|| 
-                (currentChar == '-' && (index == 0 || 
-                                       input[index-1] == '(' || 
-                                       input[index-1] == '+' || 
-                                       input[index-1] == '-' || 
-                                       input[index-1] == '*' || 
-                                       input[index-1] == '/'))) {
+                // Handle numbers (including negative numbers)
+                if (isdigit(currentChar) || 
+                   (currentChar == '-' && (index == 0 || 
+                                         input[index-1] == '(' || 
+                                         input[index-1] == '+' || 
+                                         input[index-1] == '-' || 
+                                         input[index-1] == '*' || 
+                                         input[index-1] == '/'))) {
                     if (!processNumber(input, index, numberStack)) {
-
-                        return; // error
-
-                    } else if (currentChar == '(') { // handle opening parenthesis
-
-                        opStack.push(currentChar);
-
-                    } else if (currentChar == ')') { // handle closing parenthesis
-
-                        if (!processParenthesis(numberStack, opStack)) {
-                        return;  // error
-
-                    } else if (currentChar == '+' || currentChar == '-' || 
-                                currentChar == '*' || currentChar == '/') { // handle operator
+                        return; // error in number processing
+                    }
+                }
+                // Handle opening parenthesis
+                else if (currentChar == '(') {
+                    opStack.push(currentChar);
+                }
+                // Handle closing parenthesis
+                else if (currentChar == ')') {
+                    if (!processParenthesis(numberStack, opStack)) {
+                        return;  // error in parenthesis processing
+                    }
+                }
+                // Handle operators
+                else if (currentChar == '+' || currentChar == '-' || 
+                         currentChar == '*' || currentChar == '/') {
                     
-                        // for operators with higher or equal precedence
-                        while (!opStack.isEmpty() && 
-                                precedence(opStack.peek()) >= precedence(currentChar) && 
-                                opStack.peek() != '(') { // 
-                            
-                            if (!processOperator(numberStack, opStack)) {
-
-                                return;  // error
-                                
-                            }
-                        }
-                        // push currentChar onto stack
-                        opStack.push(currentChar);
-                    } else {
-
-                        cout << "Invalid character '" << currentChar << "' at position " << index << endl;
-                        return;
-
-                    }
-                    // move to next char
-                    index++;
-                    }
-                    // to process everything else
-                    while (!opStack.isEmpty()) {
-
-                        // checking for errors in mismatched parentheses
-                        if (opStack.peek() == '(' || opStack.peek() == ')') {
-                            cout << "Mismatched parentheses or missing closing parenthesis" << endl;
-                            return;
-                        }
+                    // Process operators with higher or equal precedence
+                    while (!opStack.isEmpty() && 
+                           precedence(opStack.peek()) >= precedence(currentChar) && 
+                           opStack.peek() != '(') {
                         
                         if (!processOperator(numberStack, opStack)) {
-                            return;  // error
+                            return;  // error in operator processing
                         }
                     }
-                    // checking if evaluation was bueno
-                    if (numberStack.isEmpty()) {
-                        cout << "Invalid expression or no result produced" << endl;
-                        return;
-                    }
-                    
-                    // final result
-                    int result = numberStack.pop();
-                    
-                    // checking for extra operands
-                    if (!numberStack.isEmpty()) {
-                        cout << "Warning: Expression had extra operands" << endl;
-                    }
-                    
-                    // print final result
-                    cout << "Result: " << result << endl;
+                    // push currentChar onto stack
+                    opStack.push(currentChar);
+                }
+                // hadnling invalid characters
+                else {
+                    cout << "Invalid character '" << currentChar << "' at position " << index << endl;
+                    return;
+                }
+                
+                // move to next char
+                index++;
+            }
+            
+            // processing any remaining operators
+            while (!opStack.isEmpty()) {
+                // checking for errors in mismatched parentheses
+                if (opStack.peek() == '(' || opStack.peek() == ')') {
+                    cout << "Mismatched parentheses or missing closing parenthesis" << endl;
+                    return;
+                }
+                
+                if (!processOperator(numberStack, opStack)) {
+                    return;  // error in operator processing
                 }
             }
+            
+            // checking if evaluation was successful
+            if (numberStack.isEmpty()) {
+                cout << "Invalid expression or no result produced" << endl;
+                return;
+            }
+            
+            // final result
+            int result = numberStack.pop();
+            
+            // checking for extra operands
+            if (!numberStack.isEmpty()) {
+                cout << "Expression has extra operands" << endl;
+            }
+            
+            // print final result
+            cout << "Result: " << result << endl;
         }
-
 };
 
 #endif
