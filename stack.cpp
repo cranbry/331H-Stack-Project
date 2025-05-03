@@ -32,5 +32,22 @@ using namespace std;
  */
 
 int main() {
-    // Coming soon...
+
+    cout << "This program evaluates arithmetic expressions in infix notation." << endl;
+    cout << "Supports: +, -, *, /" << endl;
+    cout << "You can use parentheses and negative numbers." << endl << endl;
+    
+    // input from user
+    string expression;
+    cout << "Enter an infix expression to evaluate: ";
+    getline(cin, expression);  // reading all to find spaces
+    
+    // eval object
+    InfixEval evaluator;
+    
+    // evaluate expression and display result
+    evaluator.evaluateExpression(expression);
+    
+    return 0;
+
 }

@@ -10,6 +10,8 @@ template <class T>
 struct Node {
     T data;            // node for storing data
     Node<T> *next;     // pointer to next node
+
+    Node(const T& d, Node<T>* n = nullptr) : data(d), next(n) {}
 };
 
 template <class T>
@@ -31,7 +33,7 @@ class Stack {
     // method to push a value onto the top of th stack
     void push(const T& value) {
         // new node with given value that points to top
-        Node<T> *p = new Node<T>{value, top}; 
+        Node<T> *p = new Node<T>(value, top);
 
         // updating top pointer to new node;
         top = p;
