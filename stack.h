@@ -251,6 +251,73 @@ class InfixEval {
                                        input[index-1] == '-' || 
                                        input[index-1] == '*' || 
                                        input[index-1] == '/'))) {
+                    if (!processNumber(input, index, numberStack)) {
+
+                        return; // error
+
+                    } else if (currentChar == '(') { // handle opening parenthesis
+
+                        opStack.push(currentChar);
+
+                    } else if (currentChar == ')') { // handle closing parenthesis
+
+                        if (!processParenthesis(numberStack, opStack)) {
+                        return;  // error
+
+                    } else if (currentChar == '+' || currentChar == '-' || 
+                                currentChar == '*' || currentChar == '/') { // handle operator
+                    
+                        // for operators with higher or equal precedence
+                        while (!opStack.isEmpty() && 
+                                precedence(opStack.peek()) >= precedence(currentChar) && 
+                                opStack.peek() != '(') { // 
+                            
+                            if (!processOperator(numberStack, opStack)) {
+
+                                return;  // error
+                                
+                            }
+                        }
+                        // push currentChar onto stack
+                        opStack.push(currentChar);
+                    } else {
+
+                        cout << "Invalid character '" << currentChar << "' at position " << index << endl;
+                        return;
+
+                    }
+                    // move to next char
+                    index++;
+                    }
+                    // to process everything else
+                    while (!opStack.isEmpty()) {
+
+                        // checking for errors in mismatched parentheses
+                        if (opStack.peek() == '(' || opStack.peek() == ')') {
+                            cout << "Mismatched parentheses or missing closing parenthesis" << endl;
+                            return;
+                        }
+                        
+                        if (!processOperator(numberStack, opStack)) {
+                            return;  // error
+                        }
+                    }
+                    // checking if evaluation was bueno
+                    if (numberStack.isEmpty()) {
+                        cout << "Invalid expression or no result produced" << endl;
+                        return;
+                    }
+                    
+                    // final result
+                    int result = numberStack.pop();
+                    
+                    // checking for extra operands
+                    if (!numberStack.isEmpty()) {
+                        cout << "Warning: Expression had extra operands" << endl;
+                    }
+                    
+                    // print final result
+                    cout << "Result: " << result << endl;
                 }
             }
         }
