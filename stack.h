@@ -175,6 +175,35 @@ class InfixEval {
         return true;
     }
     
+    bool processNumber(const string &expr, int &index, Stack<int> &numberStack) {
+        bool isNegative = false;
+
+        if (expr[index] == '-') {
+            isNegative = true;
+            index++; // moving past the ' - ' sign
+
+            // making sure there is digit after minus sign
+            if (index >= expr.length() || !isdigit(expr[index])){
+
+                cout << "Number format is not valid" << endl;
+                return false;
+            }
+        }
+        // parsing the number
+        int num = 0;
+
+        // applying negative sign if needed
+        if (isNegative) {
+            num -= num;
+        }
+
+        // pushing num into the stack
+        numberStack.push(num);
+
+        // adjusting index because we are 1 num too far
+        index--;
+        return true;
+    } 
 
     public:
         void evaluateExpression(const string &input) {
@@ -185,7 +214,7 @@ class InfixEval {
             int index = 0;
             // processing each character in the input string
             while (index < input.length()) {
-                
+
                 char currentChar = input[index];
 
                 // skipping spaces
